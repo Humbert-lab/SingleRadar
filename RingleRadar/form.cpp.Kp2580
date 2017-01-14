@@ -1,0 +1,150 @@
+#include "form.h"
+#include "ui_form.h"
+
+#include <QMessageBox>
+#include <QPalette>
+#include <QDebug>
+Form::Form(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::Form)
+{
+    ui->setupUi(this);
+ //   setWindowOpacity(0.9);
+ //   setBackgroundRole(QPalette::AlternateBase);
+
+    init();
+   // setAutoFillBackground(true);
+    connect(setcoord_btn,SIGNAL(clicked()),this,SLOT(coordBtn_clicked()));
+    connect(setRPM_btn,SIGNAL(clicked()),this,SLOT(RPMBtn_clicked()));
+    connect(setpower_btn,SIGNAL(clicked()),this,SLOT(powerBtn_clicked()));
+}
+
+Form::~Form()
+{
+    delete ui;
+}
+void Form::init()
+{
+    toolBarInit();
+    rightWidgetInit();
+
+    hlayout = new QHBoxLayout();
+    vlayout = new QVBoxLayout();
+
+    plot = new MyPlot();
+
+    QPalette palette;
+    palette.setColor(QPalette::Background,Qt::yellow); //设置背景黑色
+   // setPalette(palette);
+    plot->setPalette(palette);
+    plot->setPlotBackground(QBrush(Qt::black));
+    plot->setAutoFillBackground(true);
+
+
+    textedit = new QTextEdit();
+    groupBox = new QGroupBox();
+    groupBox->setTitle(tr("操作日志"));
+    QVBoxLayout* layout = new QVBoxLayout();
+    layout->addWidget(textedit);
+    groupBox->setLayout(layout);
+
+    //hlayout->addWidget(toolbar);
+    hlayout->addWidget(plot);
+    hlayout->addLayout(vlayout_1);
+    hlayout->setStretchFactor(plot,4);
+    hlayout->setStretchFactor(vlayout_1,1);
+
+//    hlayout->addLayout(ui->verticalLayout_2);
+    vlayout->addWidget(toolbar);
+    vlayout->addLayout(hlayout);
+    vlayout->addWidget(groupBox);
+    vlayout->setStretchFactor(toolbar,1);
+    vlayout->setStretchFactor(hlayout,7);
+    vlayout->setStretchFactor(groupBox,1);
+    setLayout(vlayout);
+}
+void Form::toolBarInit()
+{
+    toolbar = new QToolBar(this);
+    grab_act = new QAction(tr("抓取"),this);
+    unzoom_act = new QAction(tr("归心摆正"),this);
+    param_act = new QAction(tr("参数设置"),this);
+
+    toolbar->addAction(grab_act);
+    toolbar->addAction(unzoom_act);
+    toolbar->addAction(param_act);
+
+}
+void Form::rightWidgetInit()
+{
+
+    setcoord_btn = new QPushButton(tr("设置"));
+    setpower_btn = new QPushButton(tr("设置"));
+    setRPM_btn = new QPushButton(tr("设置"));
+
+    longitude_lab = new QLabel(tr("经度："));
+    latitude_lab = new QLabel(tr("纬度："));
+    power_lab = new QLabel(tr("功率："));
+    RPM_lab = new QLabel(tr("转速："));
+    powerunit_lab = new QLabel(tr("km"));
+    RPMunit_lab = new QLabel(tr("r/min"));
+   // powerunit_lab->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Preferred );
+
+    longitude_edt = new QLineEdit(tr(""),NULL);
+    latitude_edt = new QLineEdit(tr(""),NULL);
+    power_sp = new QSpinBox();
+    RPM_sp = new QSpinBox();
+
+    coord_lyt = new QHBoxLayout();
+    RPM_lyt = new QHBoxLayout();
+    power_lyt = new QHBoxLayout();
+    vlayout_1 = new QVBoxLayout();
+
+    coord_lyt->addWidget(longitude_lab);
+    coord_lyt->addWidget(longitude_edt);
+    coord_lyt->addWidget(latitude_lab);
+    coord_lyt->addWidget(latitude_edt);
+    coord_lyt->addWidget(setcoord_btn);
+
+    RPM_lyt->addWidget(RPM_lab);
+    RPM_lyt->addWidget(RPM_sp);
+    RPM_lyt->addWidget(RPMunit_lab);
+    RPM_lyt->addWidget(setRPM_btn);
+
+    power_lyt->addWidget(power_lab);
+    power_lyt->addWidget(power_sp);
+    power_lyt->addWidget(powerunit_lab);
+    power_lyt->addWidget(setpower_btn);
+    coord_lyt->setSizeConstraint(QLayout::SetMinimumSize);
+    vlayout_1->addLayout(coord_lyt);
+    vlayout_1->addLayout(RPM_lyt);
+    vlayout_1->addLayout(power_lyt);
+
+}
+
+void Form::grabAct_clicked()
+{
+
+}
+void Form::unzoomAct_clicked()
+{
+
+}
+void Form::paramAct_clicked()
+{
+
+}
+
+void Form::coordBtn_clicked()
+{
+    qDebug()<<width()<<" "<<height()<<endl;
+    QMessageBox::information(this,tr("坐标设置提示"),tr("设置成功"));
+}
+void Form::RPMBtn_clicked()
+{
+    QMessageBox::information(this,tr("转速设置提示"),tr("设置成功"));
+}
+void Form::powerBtn_clicked()
+{
+    QMessageBox::information(this,tr("功率设置提示"),tr("设置成功"));
+}

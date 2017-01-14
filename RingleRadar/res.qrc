@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/image/grab.jpg</file>
+        <file>res/image/unzoom.jpg</file>
+        <file>res/image/on.jpg</file>
+        <file>res/image/off.jpg</file>
+        <file>res/image/parame.jpg</file>
+        <file>res/image/start.jpg</file>
+        <file>res/image/stop.jpg</file>
+    </qresource>
+</RCC>
